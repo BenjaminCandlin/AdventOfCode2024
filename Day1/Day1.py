@@ -5,8 +5,8 @@ right = []
 # Import data
 with open("Day1\input.txt", "r") as data:
     lines = data.readlines()
-    for l in lines:
-        split_line = l.split("   ")
+    for line in lines:
+        split_line = line.split("   ")
         left.append(int(split_line[0]))
         right.append(int(split_line[1]))
 
