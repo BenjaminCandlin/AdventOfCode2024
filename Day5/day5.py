@@ -2,16 +2,15 @@ import sys
 import os
 
 sys.path.append(r"C:\Users\BENCAND\Repos\AdventOfCode2024\AdventOfCode2024")
-from import_input import import_input
+from custom import import_input
 
 
 ordering_rules = import_input("Day5/ordering_rules.txt")
 update_list = import_input("Day5/update_list.txt")
 test_rules = import_input("Day5/test_rules.txt")
 
+
 # Put ordering rules into dictionary
-
-
 def convert_to_dict(ordering_rules):
     ordering_dict = {}
     for line in ordering_rules:
@@ -25,6 +24,7 @@ def convert_to_dict(ordering_rules):
     return ordering_dict
 
 
+# Check if an update is ordered correctly
 def check_valid(update, ordering_dict=convert_to_dict(ordering_rules)):
     checked_values = []
     for value in update:
@@ -37,6 +37,7 @@ def check_valid(update, ordering_dict=convert_to_dict(ordering_rules)):
     return True
 
 
+# Get middle digit
 def get_middle(list):
     middle_index = int((len(list) - 1) / 2)
     return list[middle_index]
@@ -45,11 +46,10 @@ def get_middle(list):
 ordering_dict = convert_to_dict(ordering_rules)
 test_dict = convert_to_dict(test_rules)
 
-
 assert check_valid([75, 47, 61, 53, 29], test_dict) == True
 assert check_valid([75, 97, 47, 61, 53], test_dict) == False
 
-
+# Check which updates are valid
 valid_updates = []
 invalid_updates = []
 
@@ -60,7 +60,7 @@ for line in update_list:
     else:
         invalid_updates.append(int_line)
 
-
+# Sum middle digits
 middle_numbers = []
 for list in valid_updates:
     middle_numbers.append(get_middle(list))
@@ -71,6 +71,7 @@ print(sum(middle_numbers))
 # Part 2
 
 
+# Check an individual value is correctly ordered
 def check_position(value, update, ordering_dict=convert_to_dict(ordering_rules)):
     invalid_numbers = ordering_dict[value]
     check_index = update.index(value)
@@ -80,9 +81,7 @@ def check_position(value, update, ordering_dict=convert_to_dict(ordering_rules))
     return True
 
 
-# Sort invalid updates to be valid
-
-
+# Sort invalid update to be valid (right to left)
 def sort_invalid(update, ordering_dict=convert_to_dict(ordering_rules)):
     for value in reversed(update):
         while check_position(value, update, ordering_dict) is False:
@@ -91,11 +90,12 @@ def sort_invalid(update, ordering_dict=convert_to_dict(ordering_rules)):
     return update
 
 
+# Repeat sorting for each update until they are all sorted
 for update in invalid_updates:
     while check_valid(update) is False:
         sort_invalid(update)
 
-
+# Calculate sum of middle digits
 invalid_middle_numbers = []
 for list in invalid_updates:
     invalid_middle_numbers.append(get_middle(list))
