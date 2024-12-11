@@ -31,8 +31,10 @@ def combination_creation(list):
         for combination in combinations:
             combination_plus = combination + ["+"] + [number]
             combination_multiply = combination + ["*"] + [number]
+            combination_concat = combination + ["||"] + [number]
             temp_combinations.append(combination_plus)
             temp_combinations.append(combination_multiply)
+            temp_combinations.append(combination_concat)
         combinations = copy.deepcopy(temp_combinations)
     return combinations
 
@@ -49,6 +51,8 @@ def calculate_combination(combination):
                 result *= item
             elif combination[i - 1] == "+":
                 result += item
+            elif combination[i - 1] == "||":
+                result = int(str(result) + str(item))
     return result
 
 
@@ -58,6 +62,7 @@ def evaluate_valid(input):
     valid = []
 
     for line in input:
+        print(line)
         aim = int(line.split(":")[0])
         numbers_str = line.split(":")[1].strip().split(" ")
         numbers = []
@@ -76,6 +81,10 @@ def evaluate_valid(input):
 
 
 assert evaluate_valid(["292: 11 6 16 20"]) == 292
-assert evaluate_valid(test_input) == 3749
+print("test 1 passed")
+assert evaluate_valid(["156: 15 6"]) == 156
+print("test 2 passed")
+assert evaluate_valid(test_input) == 11387
+print("test 3 passed")
 
 print(evaluate_valid(input))
